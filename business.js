@@ -1,6 +1,7 @@
-
 (function () {
-    window.bu = new program()
+    // it is the namespace of business layer 
+    // to keep things separated!
+    namespace.business = new program()
     function program() {
         this.alert = function () { }
         this.storage = function () {
@@ -16,7 +17,7 @@
             function startTime() {
                 var today = new Date();
                 var h = today.getHours();
-                var m = today.getMinutes();
+                var m = today.getMinutes();   
                 var s = today.getSeconds();
                 m = checkTime(m);
                 s = checkTime(s);
@@ -32,11 +33,8 @@
         this.start = function () {
 
         }
+        this.add = function(){
+
+        }
     }
-    $(document).ready(function () {
-        // check the timer
-        // check the buttons
-        // check the data base
-        bu.clock('.bu-clock')
-    })
 })();
