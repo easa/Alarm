@@ -16,90 +16,103 @@
 
     function timer(startTime) {
         var v = startTime || 0, // v should be consistant
-            t = v,
+            //t = v,
             initiateTime = Date.now();
 
-        function pastTime() {
-            return t = Date.now() - initiateTime, t;
+        this.pastTime = function(newTime) {
+            var r = newTime || Date.now() - initiateTime;
+            return r;
         };
-        this.toString = function() {
-            return separateTime.join().toString();
-        };
+        this.toString = function(time, options) {
+            var result = options ? options.format || 'mm:ss' : 'mm:ss:ms',
+                model = separateTime(time, options = {
+                    doFormat: true
+                });
+            result.split(':').forEach((item) => {
+                if (!model[item]) throw 'bad format'; //, use hh(hours), mm(minutes), ss(seconds), ms(milisecond) for equivalet in two digit format';
+                result = result.replace(item, model[item]);
+            });
+            return result;
+        }
         this.toModel = function(time) {
             return separateTime(time);
         }
-        this.value = function() {
-            pastTime();
-            return t + v;
-        };
+
         this.initTime = function() {
             return initiateTime;
         }
     }
+    // mock of timer
     window.namespace.testTimer = timer;
-
-    function separateTime(time) {
+    window.namespace.timer = timer;
+    // convert the date-time integer to an object like {hh,mm,ss,ms}
+    function separateTime(time, options) {
+        if (!time) throw 'time should be passed as a parameter';
+        var shouldFormat = false;
+        if (options && options.doFormat)
+            shouldFormat = true;
         //var date = new Date();
         //var t = date.setTime(time);
-        var minutes = 1000 * 60;
-        var hours = minutes * 60;
-        var days = hours * 24;
+        var minutes = 1000 * 60,
+            hours = minutes * 60,
+            days = hours * 24;
 
+        // the time model to show to user
         var model = [{
-                value: "",
+                value: 0,
                 name: 'miliseconds',
-                nickName: 'ms',
+                nickName: shouldFormat ? 'ms' : 'ms',
                 calc: 1,
-                calc2: 1000
+                highValue: 1000
             },
             {
-                value: "",
+                value: 0,
                 name: 'seconds',
-                nickName: 's',
+                nickName: shouldFormat ? 'ss' : 's',
                 calc: 1000,
-                calc2: 60
+                highValue: 60
             },
             {
-                value: "",
+                value: 0,
                 name: 'minutes',
-                nickName: 'm',
-                calc: 1000 * 60,
-                calc2: 60
+                nickName: shouldFormat ? 'mm' : 'm',
+                calc: minutes,
+                highValue: 60
             },
             {
-                value: "",
+                value: 0,
                 name: 'hours',
-                nickName: 'h',
-                calc: minutes * 60,
-                calc2: 60
+                nickName: shouldFormat ? 'hh' : 'h',
+                calc: hours,
+                highValue: 60
             }
             // {
-            //     value: "",
+            //     value: 0,
             //     name: 'days',
-            //     nickName: 'd',
+            //     nickName: shouldFormat ? 'dd':'d',
             //     calc: hours * 24,
-            //     calc2: 60
+            //     highValue: 60
             // },
             // {
-            //     value: "",
+            //     value: 0,
             //     name: 'weeks',
-            //     nickName: 'w',
+            //     nickName: shouldFormat ? 'ww':'w',
             //     calc: days * 7,
-            //     calc2: 60
+            //     highValue: 60
             // },
             // {
-            //     value: "",
+            //     value: 0,
             //     name: 'months',
-            //     nickName: 'm',
+            //     nickName: shouldFormat ? 'mn':'m',
             //     calc: days * 30,
-            //     calc2: 60
+            //     highValue: 60
             // },
             // {
-            //     value: "",
+            //     value: 0,
             //     name: 'years',
-            //     nickName: 'y',
+            //     nickName: shouldFormat ? 'yy':'y',
             //     calc: days * 365,
-            //     calc2: 60
+            //     highValue: 60
             // },
         ];
 
@@ -108,7 +121,16 @@
         // making results
         model.forEach((element) => {
             element.value = Math.floor(time / element.calc);
-            result[element.nickName] = element.value % element.calc2;
+            // chekc if format needed
+            if (shouldFormat)
+                result[element.nickName] = (function(el) {
+                    var r = n = (el.value % el.highValue);
+                    for (var i = 1; 10 ** i < el.highValue && el.value <= el.highValue; i++)
+                        r = '0' + r;
+                    return r;
+                })(element);
+            else
+                result[element.nickName] = element.value % element.highValue;
         });
 
         // t: model.find((element) => {

@@ -23,4 +23,61 @@
         this.tel = _tel || null
         this.note = _note || null
     }
+    var timeModels = [{
+            value: "",
+            name: 'miliseconds',
+            nickName: shouldFormat ? 'ms' : 'ms',
+            calc: 1,
+            highValue: 1000
+        },
+        {
+            value: "",
+            name: 'seconds',
+            nickName: shouldFormat ? 'ss' : 's',
+            calc: 1000,
+            highValue: 60
+        },
+        {
+            value: "",
+            name: 'minutes',
+            nickName: shouldFormat ? 'mm' : 'm',
+            calc: minutes,
+            highValue: 60
+        },
+        {
+            value: "",
+            name: 'hours',
+            nickName: shouldFormat ? 'hh' : 'h',
+            calc: hours,
+            highValue: 60
+        }
+        // {
+        //     value: "",
+        //     name: 'days',
+        //     nickName: shouldFormat ? 'dd':'d',
+        //     calc: hours * 24,
+        //     highValue: 60
+        // },
+        // {
+        //     value: "",
+        //     name: 'weeks',
+        //     nickName: shouldFormat ? 'ww':'w',
+        //     calc: days * 7,
+        //     highValue: 60
+        // },
+        // {
+        //     value: "",
+        //     name: 'months',
+        //     nickName: shouldFormat ? 'mn':'m',
+        //     calc: days * 30,
+        //     highValue: 60
+        // },
+        // {
+        //     value: "",
+        //     name: 'years',
+        //     nickName: shouldFormat ? 'yy':'y',
+        //     calc: days * 365,
+        //     highValue: 60
+        // },
+    ];
 }();
