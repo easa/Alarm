@@ -1,0 +1,13 @@
+#chronometer {
+    font-size: xx-large;
+    font-variant-ligatures: contextual;
+    font-family: consolas;
+    font-variant-east-asian: ruby;
+    font-stretch: extra-condensed;
+    position: relative;
+    margin: 5px auto;
+    display: inline-block;
+    width: 300px;
+    height: 150px;
+    border-radius: 50%;
+}
